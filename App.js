@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import RegisterScreen from './screens/AuthentificationScreens/RegisterScreen';
 import LoginScreen from './screens/AuthentificationScreens/LoginScreen';
+import HomeStack from './navigation/HomeStack';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,11 @@ const Auth = () => {
       <Stack.Screen
         name="Register"
         component={RegisterScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="HomeStack"
+        component={HomeStack}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

@@ -1,6 +1,7 @@
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import HomeStack from "../../navigation/HomeStack";
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -23,7 +24,16 @@ export default function LoginScreen() {
         }
       );
       const content = await response.json();
-      console.log(content);
+      if (content.accessToken) {
+        const user = {
+          email: email,
+          accessToken: content.accessToken
+        }
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'HomeStack', params: { user } }]
+        })
+      }
     } catch (err) {
       console.error(err);
     }
