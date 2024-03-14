@@ -5,30 +5,38 @@ import GameCard from "../../components/GameCard";
 
 export default function LobbyScreen({ route }) {
   const [data, setData] = useState([]);
-  const { user } = route.params;
+  const { user, id } = route.params;
   const token = user.accessToken;
-
   const createGame = async () => {
     try {
-      const response = await fetch( "https://malamute-enabled-yak.ngrok-free.app/game",{
+      const response = await fetch(
+        "https://malamute-enabled-yak.ngrok-free.app/game",
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       if (response.ok) {
-        const updatedResponse = await fetch( "https://malamute-enabled-yak.ngrok-free.app/game", {
+        const updatedResponse = await fetch(
+          "https://malamute-enabled-yak.ngrok-free.app/game",
+          {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const content = await updatedResponse.json();
-        setData(content.games);
+        setData(
+          content.games.filter(
+            (game) => game.player1Id === null || game.player2Id === null ||
+            game.player1Id === id ||
+            game.player2Id === id )
+        );
       } else {
         console.error("Failed to create game");
       }
@@ -37,19 +45,25 @@ export default function LobbyScreen({ route }) {
     }
   };
 
-
   useEffect(() => {
     const fetchData = async () => {
-        const response = await fetch("https://malamute-enabled-yak.ngrok-free.app/game",{
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-            }
-        );
-        const content = await response.json();
-        setData(content.games)   
+      const response = await fetch(
+        "https://malamute-enabled-yak.ngrok-free.app/game",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const content = await response.json();
+      setData(
+        content.games.filter(
+          (game) => game.player1Id === null || game.player2Id === null ||
+          game.player1Id === id ||
+          game.player2Id === id )
+      );
     };
     fetchData();
   }, []);
@@ -58,7 +72,9 @@ export default function LobbyScreen({ route }) {
     <View style={styles.container}>
       <FlatList
         data={data}
-        renderItem={({ item }) => <GameCard game={item} />}
+        renderItem={({ item }) => (
+          <GameCard game={item} id={id} token={token} />
+        )}
         keyExtractor={(item) => item.id}
       />
       <TouchableOpacity onPress={createGame} style={styles.createGameButton}>
@@ -66,7 +82,7 @@ export default function LobbyScreen({ route }) {
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

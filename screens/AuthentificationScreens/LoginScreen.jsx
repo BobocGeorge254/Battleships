@@ -1,4 +1,10 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import HomeStack from "../../navigation/HomeStack";
@@ -21,18 +27,18 @@ export default function LoginScreen() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(postData),
-        }
+        },
       );
       const content = await response.json();
       if (content.accessToken) {
         const user = {
           email: email,
-          accessToken: content.accessToken
-        }
+          accessToken: content.accessToken,
+        };
         navigation.reset({
           index: 0,
-          routes: [{ name: 'HomeStack', params: { user } }]
-        })
+          routes: [{ name: "HomeStack", params: { user } }],
+        });
       }
     } catch (err) {
       console.error(err);

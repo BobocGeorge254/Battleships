@@ -7,27 +7,28 @@ export default function RegisterScreen() {
   const navigation = useNavigation();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const createUser =  async (email, password) => {
+  const createUser = async (email, password) => {
     const postData = {
-      'email': email,
-      'password': password
-    }
+      email: email,
+      password: password,
+    };
     try {
-      const response = await fetch("https://malamute-enabled-yak.ngrok-free.app/auth/register",{
+      const response = await fetch(
+        "https://malamute-enabled-yak.ngrok-free.app/auth/register",
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(postData)
-        }
+          body: JSON.stringify(postData),
+        },
       );
       const content = await response.json();
-      console.log(content)
-    }
-    catch(err) {
+      console.log(content);
+    } catch (err) {
       console.error(err);
     }
-  }
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Register</Text>

@@ -9,9 +9,9 @@ export default function HomeScreen({ route }) {
   const navigation = useNavigation();
 
   const handleLogout = () => {
-    user.accessToken = null ;
+    user.accessToken = null;
     navigation.navigate("Login");
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,7 +24,7 @@ export default function HomeScreen({ route }) {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const content = await response.json();
         setData(content);
@@ -52,7 +52,7 @@ export default function HomeScreen({ route }) {
             <Text style={styles.profileItem}>Email: {user.email}</Text>
           </View>
           <TouchableOpacity
-            onPress={() => navigation.navigate("Lobby")}
+            onPress={() => navigation.navigate("Lobby", { id: data.user.id })}
             style={styles.button}
           >
             <Text style={styles.buttonText}>Go to Lobby</Text>
