@@ -1,0 +1,1 @@
+export const api_url = 'https://malamute-enabled-yak.ngrok-free.app'

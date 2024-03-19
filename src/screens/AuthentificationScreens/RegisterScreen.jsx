@@ -1,34 +1,24 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+
+import UserService from "../../services/user.service";
+import { setUser } from "../../redux/userSlice";
+import globalStyles from "../../styles";
 
 export default function RegisterScreen() {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const createUser = async (email, password) => {
-    const postData = {
-      email: email,
-      password: password,
-    };
-    try {
-      const response = await fetch(
-        "https://malamute-enabled-yak.ngrok-free.app/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(postData),
-        },
-      );
-      const content = await response.json();
-      console.log(content);
-    } catch (err) {
-      console.error(err);
-    }
+
+  const handleRegister = async () => {
+    const data = await UserService.register(email, password)
+    dispatch(setUser(data));
+    navigation.navigate("HomeStack");
   };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Register</Text>
@@ -51,7 +41,7 @@ export default function RegisterScreen() {
           autoCapitalize="none"
         />
       </View>
-      <TouchableOpacity onPress={() => createUser(email, password)}>
+      <TouchableOpacity onPress={handleRegister} style={[globalStyles.primaryButton, globalStyles.fullWidth]}>
         <Text>Register</Text>
       </TouchableOpacity>
       <Text onPress={() => navigation.navigate("Login")}>

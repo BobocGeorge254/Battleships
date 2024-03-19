@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
-export default function HomeScreen({ route }) {
+export default function HomeScreen() {
   const [data, setData] = useState(null);
-  const { user } = route.params;
+  const user = useSelector(state => state.userReducer.user);
   const token = user.accessToken;
   const navigation = useNavigation();
 

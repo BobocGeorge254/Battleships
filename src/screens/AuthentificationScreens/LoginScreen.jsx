@@ -5,45 +5,29 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+
 import HomeStack from "../../navigation/HomeStack";
+import UserService from "../../services/user.service";
+import { setUser } from "../../redux/userSlice";
+import globalStyles from "../../styles";
 
 export default function LoginScreen() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const loginUser = async (email, password) => {
-    const postData = {
-      email: email,
-      password: password,
-    };
-    try {
-      const response = await fetch(
-        "https://malamute-enabled-yak.ngrok-free.app/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(postData),
-        },
-      );
-      const content = await response.json();
-      if (content.accessToken) {
-        const user = {
-          email: email,
-          accessToken: content.accessToken,
-        };
-        navigation.reset({
-          index: 0,
-          routes: [{ name: "HomeStack", params: { user } }],
-        });
-      }
-    } catch (err) {
-      console.error(err);
-    }
+
+  const handleLogin = async () => {
+    const data = await UserService.login(email, password);
+    if (!data || data.code == 403) return;
+
+    dispatch(setUser(data));
+    navigation.navigate("HomeStack")
   };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Log In</Text>
@@ -66,7 +50,7 @@ export default function LoginScreen() {
           autoCapitalize="none"
         />
       </View>
-      <TouchableOpacity onPress={() => loginUser(email, password)}>
+      <TouchableOpacity onPress={handleLogin} style={[globalStyles.primaryButton, globalStyles.fullWidth]}>
         <Text>Log in</Text>
       </TouchableOpacity>
       <Text onPress={() => navigation.navigate("Register")}>
@@ -82,11 +66,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 40
   },
   inputView: {
     gap: 15,
     width: "100%",
-    paddingHorizontal: 40,
     marginBottom: 5,
   },
   input: {
@@ -94,7 +78,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderColor: "black",
     borderWidth: 1,
-    borderRadius: 7,
+    borderRadius: 10,
   },
   title: {
     fontSize: 30,
