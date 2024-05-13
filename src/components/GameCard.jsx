@@ -37,7 +37,9 @@ const GameCard = ({ game, userData }) => {
   function handleButton() {
     if (!isPlayer)
       return handleJoinGame();
-
+    
+    if (game.status == "MAP_CONFIG")
+      navigation.navigate("MapConfig", {game})
   }
 
   function handleJoinGame() {

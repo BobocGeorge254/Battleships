@@ -10,7 +10,7 @@ const Tabs = () => {
     <Tab.Navigator initialRouteName='Home'>
       <Tab.Screen name="AvailableGames" component={AvailableGames} options={{title: 'Discover'}}/>
       <Tab.Screen name="Home" component={HomeScreen} options={{title: 'Home'}} />
-      <Tab.Screen name="MyGamesStack" component={GamesStack} options={{title: 'My games'}}/>
+      <Tab.Screen name="MyGamesStack" component={GamesStack} options={{headerShown: false}}/>
     </Tab.Navigator>
   );
 }

@@ -103,10 +103,10 @@ const GameService = {
         Authorization: `Bearer ${this.authToken}`
       },
     })
-    .catch(e => null);
+    .catch(e => console.log(e.response.data));
   
     if (!response) return null;
-    return response.data
+    return response.status
   },
 
   async strike(gameId, x, y) {
