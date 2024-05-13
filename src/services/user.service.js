@@ -1,4 +1,6 @@
 import axios from "axios";
+import * as SecureStore from 'expo-secure-store';
+
 import { api_url } from "../constants";
 import GameService from "./game.service";
 
@@ -11,7 +13,10 @@ const UserService = {
       .catch(e => null)
 
     if (!response) return null;
-
+    
+    await SecureStore.setItemAsync('email', email);
+    await SecureStore.setItemAsync('password', password);
+    
     this.authToken = response.data.accessToken;
     GameService.authToken = this.authToken;
 
@@ -27,6 +32,9 @@ const UserService = {
     
     if (!response) return null;
 
+    await SecureStore.setItemAsync('email', email);
+    await SecureStore.setItemAsync('password', password);
+    
     this.authToken = response.data.accessToken;
     GameService.authToken = this.authToken;
 
@@ -45,6 +53,17 @@ const UserService = {
     
     if (!response) return null;
     return response.data
+  },
+
+  async recoverSession() {
+    const email = await SecureStore.getItemAsync('email').catch(() => null);
+    const password = await SecureStore.getItemAsync('password').catch(() => null);
+
+    let result = null;
+    if (email && password)
+      result = await this.login(email, password)
+
+    return result;
   }
 }
 

@@ -7,18 +7,34 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import HomeStack from "../../navigation/HomeStack";
 import UserService from "../../services/user.service";
 import { setUser } from "../../redux/userSlice";
 import globalStyles from "../../styles";
+import LoadingScreen from "../UtilityScreens/LoadingScreen";
 
 export default function LoginScreen() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    UserService.recoverSession().then((data) => {
+      if (!data || data.code == 403) {
+        setLoading(false);
+        return
+      };
+
+      dispatch(setUser(data));
+      navigation.navigate("Tabs")
+    }).catch(() => {
+      setLoading(false);
+    })
+  })
 
   const handleLogin = async () => {
     const data = await UserService.login(email, password);
@@ -27,6 +43,8 @@ export default function LoginScreen() {
     dispatch(setUser(data));
     navigation.navigate("Tabs")
   };
+
+  if (loading) return <LoadingScreen />
 
   return (
     <View style={styles.container}>
