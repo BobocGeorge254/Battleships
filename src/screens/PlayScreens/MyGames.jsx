@@ -12,6 +12,7 @@ const MyGames = () => {
   const user = useSelector(state => state.userReducer.user);
 
   useEffect(() => {
+    console.log(user)
     GameService.getMyGames().then(setData)
   }, [])
 

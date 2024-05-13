@@ -7,10 +7,11 @@ const Stack = createStackNavigator();
 
 const GamesStack = () => {
   return (
-    <Stack.Navigator initialRouteName="MyGames">
+    <Stack.Navigator initialRouteName="MyGames" screenOptions={{headerShown: false}}>
       <Stack.Screen
         name="MyGames"
         component={MyGames}
+        options={{headerLeft: null, title: "My games"}}
       />
     </Stack.Navigator>
   );

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { api_url } from "../constants";
+import UserService from "./user.service";
 
 
 const GameService = {
@@ -31,29 +32,30 @@ const GameService = {
     return response.data.games
   },
 
-  async getMyGames(myId) {
+  async getMyGames() {
+    const user = await UserService.me();
     let result = []
     let response = await axios
-    .get(`${api_url}/game?player1Id=${myId}`, {
+    .get(`${api_url}/game?player1Id=${user.user.id}`, {
       headers: {
         Authorization: `Bearer ${this.authToken}`
       }
     })
-    .catch(e => console.log(e));
+    .catch(e => null);
     
     if (response)
-      result.push(response.data.games)
+      result = result.concat(response.data.games)
   
     response = await axios
-    .get(`${api_url}/game?player2Id=${myId}`, {
+    .get(`${api_url}/game?player2Id=${user.user.id}`, {
       headers: {
         Authorization: `Bearer ${this.authToken}`
       }
     })
-    .catch(e => console.log(e));
+    .catch(e => null);
   
-    if (response)
-      result.push(response.data.games)
+    if (response)      
+      result = result.concat(response.data.games)
 
     console.log('my gamse: ', result)
     return result
