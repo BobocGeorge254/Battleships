@@ -26,7 +26,7 @@ const UserService = {
 
     
     if (!response) return null;
-    
+
     this.authToken = response.data.accessToken;
     GameService.authToken = this.authToken;
 
@@ -38,7 +38,7 @@ const UserService = {
     const response = await axios
       .get(`${api_url}/user/details/me`, {
         headers: {
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${this.authToken}`
         }
       })
       .catch(e => null);

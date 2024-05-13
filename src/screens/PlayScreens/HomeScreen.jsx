@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
+import UserService from "../../services/user.service";
+import LoadingScreen from "../UtilityScreens/LoadingScreen";
 
 export default function HomeScreen() {
   const [data, setData] = useState(null);
   const user = useSelector(state => state.userReducer.user);
-  const token = user.accessToken;
   const navigation = useNavigation();
 
   const handleLogout = () => {
@@ -15,56 +16,29 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "https://malamute-enabled-yak.ngrok-free.app/user/details/me",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-        const content = await response.json();
-        setData(content);
-      } catch (error) {
-        console.error("Error fetching user details: ", error);
-      }
-    };
-    fetchData();
+    UserService.me().then(setData)
   }, []);
+
+  if (!data)
+    return <LoadingScreen/>
 
   return (
     <View style={styles.container}>
-      {data ? (
-        <View>
-          <View style={styles.profileInfo}>
-            <Text style={styles.profileItem}>
-              Games Played: {data.gamesPlayed}
-            </Text>
-            <Text style={styles.profileItem}>Games Won: {data.gamesWon}</Text>
-            <Text style={styles.profileItem}>Games Lost: {data.gamesLost}</Text>
-            <Text style={styles.profileItem}>
-              Currently Playing: {data.currentlyGamesPlaying}
-            </Text>
-            <Text style={styles.profileItem}>User ID: {data.user.id}</Text>
-            <Text style={styles.profileItem}>Email: {user.email}</Text>
-          </View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Lobby", { id: data.user.id })}
-            style={styles.button}
-          >
-            <Text style={styles.buttonText}>Go to Lobby</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-            <Text style={styles.logoutButtonText}>Logout</Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <Text>Loading...</Text>
-      )}
+      <View style={styles.profileInfo}>
+        <Text style={styles.profileItem}>
+          Games Played: {data.gamesPlayed}
+        </Text>
+        <Text style={styles.profileItem}>Games Won: {data.gamesWon}</Text>
+        <Text style={styles.profileItem}>Games Lost: {data.gamesLost}</Text>
+        <Text style={styles.profileItem}>
+          Currently Playing: {data.currentlyGamesPlaying}
+        </Text>
+        <Text style={styles.profileItem}>User ID: {data.user.id}</Text>
+        <Text style={styles.profileItem}>Email: {user.email}</Text>
+      </View>
+      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+        <Text style={styles.logoutButtonText}>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 }

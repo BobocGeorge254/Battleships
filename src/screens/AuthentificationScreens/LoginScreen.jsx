@@ -25,7 +25,7 @@ export default function LoginScreen() {
     if (!data || data.code == 403) return;
 
     dispatch(setUser(data));
-    navigation.navigate("HomeStack")
+    navigation.navigate("Tabs")
   };
 
   return (

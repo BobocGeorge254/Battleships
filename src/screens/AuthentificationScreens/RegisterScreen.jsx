@@ -16,7 +16,7 @@ export default function RegisterScreen() {
   const handleRegister = async () => {
     const data = await UserService.register(email, password)
     dispatch(setUser(data));
-    navigation.navigate("HomeStack");
+    navigation.navigate("Tabs");
   };
 
   return (
