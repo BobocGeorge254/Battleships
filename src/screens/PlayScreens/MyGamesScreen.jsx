@@ -8,7 +8,7 @@ import GameCard from '../../components/GameCard';
 import globalStyles from '../../styles';
 import UserService from '../../services/user.service';
 
-const MyGames = () => {
+const MyGamesScreen = () => {
   const navigation = useNavigation()
   const [gamesData, setGamesData] = useState(null)
   const [userData, setUserData] = useState(null);
@@ -43,4 +43,4 @@ const MyGames = () => {
   );
 }
 
-export default MyGames;
+export default MyGamesScreen;

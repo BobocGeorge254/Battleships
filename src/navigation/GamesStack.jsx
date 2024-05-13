@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { createStackNavigator } from "@react-navigation/stack";
-import MyGames from "../screens/PlayScreens/MyGames";
+import MyGamesScreen from "../screens/PlayScreens/MyGamesScreen";
 import ConfigureScreen from "../screens/PlayScreens/ConfigureScreen";
 
 const Stack = createStackNavigator();
@@ -11,7 +11,7 @@ const GamesStack = () => {
     <Stack.Navigator initialRouteName="MyGames">
       <Stack.Screen
         name="MyGames"
-        component={MyGames}
+        component={MyGamesScreen}
         options={{headerLeft: null, title: "My games"}}
       />
       <Stack.Screen 

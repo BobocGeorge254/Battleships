@@ -19,7 +19,6 @@ const xPositions = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 const yPositions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 export default function ConfigureScreen({ route, navigation }) {
-  // 4 de 2; 3 de 3; 2 de 4; 1 de 6
   const { game } = route.params;
   const [size, setSize] = useState(2);
   const [board, setBoard] = useState(Array(10).fill(Array(10).fill(null)));
@@ -81,7 +80,7 @@ export default function ConfigureScreen({ route, navigation }) {
       </View>
       {renderBoard()}
       <Button 
-        title="Go"
+        title="Submit"
         onPress={handleSendMapConfiguration}
       />
     </View>

@@ -9,7 +9,7 @@ import globalStyles from '../../styles';
 import { useSelector } from 'react-redux';
 import UserService from '../../services/user.service';
 
-const AvailableGames = () => {
+const AvailableGamesScreen = () => {
   const navigation = useNavigation()
   const [gamesData, setGamesData] = useState(null)
   const user = useSelector(state => state.userReducer.user);
@@ -57,4 +57,4 @@ const AvailableGames = () => {
   }
 }
 
-export default AvailableGames;
+export default AvailableGamesScreen;
