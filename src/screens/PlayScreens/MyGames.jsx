@@ -1,28 +1,42 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
 import { View, FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import GameService from '../../services/game.service';
 import LoadingScreen from '../UtilityScreens/LoadingScreen';
 import GameCard from '../../components/GameCard';
 import globalStyles from '../../styles';
+import UserService from '../../services/user.service';
 
 const MyGames = () => {
-  const [data, setData] = useState(null)
-  const user = useSelector(state => state.userReducer.user);
+  const navigation = useNavigation()
+  const [gamesData, setGamesData] = useState(null)
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    console.log(user)
-    GameService.getMyGames().then(setData)
-  }, [])
+    UserService.me().then((data) =>{
+      setUserData(data)
+      GameService.getMyGames(data).then(setGamesData)
+    })
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      setGamesData(null)
+      UserService.me().then((data) =>{
+        setUserData(data)
+        GameService.getMyGames(data).then(setGamesData)
+      })
+    });
+
+    return unsubscribe;
+  }, [navigation])
 
   return (
     <View style={globalStyles.screen}>
-      {!data ? <LoadingScreen/> :
+      {!gamesData || !userData ? <LoadingScreen/> :
         <FlatList 
-          data={data}
-          renderItem={({item}) => <GameCard game={item}/>}
-          keyExtractor={(item, idx) => idx}
+          data={gamesData}
+          renderItem={({item}) => <GameCard game={item} userData={userData}/>}
+          keyExtractor={(item) => item.id}
         />
       }
     </View>

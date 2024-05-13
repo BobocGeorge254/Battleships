@@ -7,9 +7,9 @@ const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} options={{title: 'Home'}} />
+    <Tab.Navigator initialRouteName='Home'>
       <Tab.Screen name="AvailableGames" component={AvailableGames} options={{title: 'Discover'}}/>
+      <Tab.Screen name="Home" component={HomeScreen} options={{title: 'Home'}} />
       <Tab.Screen name="MyGamesStack" component={GamesStack} options={{title: 'My games'}}/>
     </Tab.Navigator>
   );

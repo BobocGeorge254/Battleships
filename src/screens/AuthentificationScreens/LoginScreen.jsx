@@ -9,7 +9,6 @@ import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 
-import HomeStack from "../../navigation/HomeStack";
 import UserService from "../../services/user.service";
 import { setUser } from "../../redux/userSlice";
 import globalStyles from "../../styles";

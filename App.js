@@ -5,7 +5,6 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import RegisterScreen from "./src/screens/AuthentificationScreens/RegisterScreen";
 import LoginScreen from "./src/screens/AuthentificationScreens/LoginScreen";
-import HomeStack from "./src/navigation/HomeStack";
 import { store } from "./src/redux/store";
 import Tabs from "./src/navigation/Tabs";
 
