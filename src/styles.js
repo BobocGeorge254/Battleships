@@ -15,6 +15,15 @@ const globalStyles = StyleSheet.create({
   
   fullWidth: {
     width: '100%'
+  },
+
+  screen: {
+    padding: 10,
+    flex: 1,
+  },
+
+  label: {
+    fontWeight: 'bold',
   }
 })
 

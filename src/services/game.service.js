@@ -15,7 +15,7 @@ const GameService = {
     .catch(e => null);
   
     if (!response) return null;
-    return response.data
+    return response.data.games
   },
 
   async getNewGames() {
@@ -26,9 +26,9 @@ const GameService = {
       }
     })
     .catch(e => null);
-  
+    
     if (!response) return null;
-    return response.data
+    return response.data.games
   },
 
   async getMyGames(myId) {
@@ -39,10 +39,10 @@ const GameService = {
         Authorization: `Bearer ${this.authToken}`
       }
     })
-    .catch(e => null);
+    .catch(e => console.log(e));
     
     if (response)
-      result.push(response.data)
+      result.push(response.data.games)
   
     response = await axios
     .get(`${api_url}/game?player2Id=${myId}`, {
@@ -50,17 +50,18 @@ const GameService = {
         Authorization: `Bearer ${this.authToken}`
       }
     })
-    .catch(e => null);
+    .catch(e => console.log(e));
   
     if (response)
-      result.push(response.data)
+      result.push(response.data.games)
 
+    console.log('my gamse: ', result)
     return result
   },
 
   async createGame() {
     const response = await axios
-    .post(`${api_url}/game`, {
+    .post(`${api_url}/game`, {},  {
       headers: {
         Authorization: `Bearer ${this.authToken}`
       }
@@ -73,7 +74,7 @@ const GameService = {
 
   async joinGame(gameId) {
     const response = await axios
-    .post(`${api_url}/game/join/${gameId}`, {
+    .post(`${api_url}/game/join/${gameId}`, {}, {
       headers: {
         Authorization: `Bearer ${this.authToken}`
       }
@@ -99,7 +100,7 @@ const GameService = {
 
   async sendMapConfig(gameId, config) {
     const response = await axios
-    .post(`${api_url}/game/${gameId}`, config,  {
+    .patch(`${api_url}/game/${gameId}`, config,  {
       headers: {
         Authorization: `Bearer ${this.authToken}`
       },
