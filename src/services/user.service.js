@@ -1,13 +1,19 @@
 import axios from "axios";
 import { api_url } from "../constants";
+import GameService from "./game.service";
 
 const UserService = {
+  authToken : null,
+
   async login(email, password) {
     const response = await axios
       .post(`${api_url}/auth/login`, {email, password})
       .catch(e => null)
 
     if (!response) return null;
+
+    this.authToken = response.data.accessToken;
+    GameService.authToken = this.authToken;
 
     response.data.email = email;
     return response.data;
@@ -20,16 +26,19 @@ const UserService = {
 
     
     if (!response) return null;
+    
+    this.authToken = response.data.accessToken;
+    GameService.authToken = this.authToken;
 
     response.data.email = email;
     return response.data;
   },
 
-  async me(token) {
+  async me() {
     const response = await axios
-      .get(`${api_url}/auth/register`, {
+      .get(`${api_url}/user/details/me`, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${authToken}`
         }
       })
       .catch(e => null);

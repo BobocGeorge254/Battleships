@@ -7,6 +7,7 @@ import RegisterScreen from "./src/screens/AuthentificationScreens/RegisterScreen
 import LoginScreen from "./src/screens/AuthentificationScreens/LoginScreen";
 import HomeStack from "./src/navigation/HomeStack";
 import { store } from "./src/redux/store";
+import Tabs from "./src/navigation/Tabs";
 
 const Stack = createStackNavigator();
 
@@ -25,8 +26,8 @@ const Auth = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="HomeStack"
-          component={HomeStack}
+          name="Tabs"
+          component={Tabs}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
