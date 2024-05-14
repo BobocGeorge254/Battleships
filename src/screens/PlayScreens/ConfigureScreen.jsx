@@ -1,19 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Button, Text, TouchableOpacity } from "react-native";
 import GameService from "../../services/game.service";
+import ShipsBoard from "../../components/ShipsBoard";
+import { ship_colors } from "../../constants";
 
 const targetShipsCount = {
   2: 4,
   3: 3,
   4: 2,
   6: 1
-}
-
-const shipColors = {
-  2: '#8fbf88',
-  3: '#5c9154',
-  4: '#295922',
-  6: '#13420b'
 }
 const xPositions = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 const yPositions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -25,21 +20,13 @@ export default function ConfigureScreen({ route, navigation }) {
   const [direction, setDirection] = useState("HORIZONTAL");
   const [ships, setShips] = useState([])
 
-  
-
-  const renderBoard = () => {
-    return board.map((row, rowIndex) => (
-      <View key={rowIndex} style={styles.row}>
-        {row.map((cell, colIndex) => (
-          <TouchableOpacity
-            key={`${rowIndex} ${colIndex}`}
-            style={[styles.cell, { backgroundColor: cell ? shipColors[cell] : "gray" }]}
-            onPress={() => handlePressCell(rowIndex, colIndex)}
-          />
-        ))}
-      </View>
-    ));
-  };
+  useEffect(() => {
+    if (!game) return;
+    GameService.getGameDetails(game.id).then(res => {
+      if (res.shipsCoord && res.shipsCoord.length > 0)
+        navigation.navigate("GameAction", {game, userData: {}})
+    })
+  }, [game])
 
   return (
     <View style={styles.container}>
@@ -78,7 +65,7 @@ export default function ConfigureScreen({ route, navigation }) {
           />
         </View>
       </View>
-      {renderBoard()}
+      <ShipsBoard board={board} cellColor={(cell) => cell ? ship_colors[cell] : "gray"} onCellPress={handlePressCell}/>
       <Button 
         title="Submit"
         onPress={handleSendMapConfiguration}
@@ -170,14 +157,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  row: {
-    flexDirection: "row",
-  },
-  cell: {
-    width: 30,
-    height: 30,
-    margin: 1,
   },
   controls: {
     flexDirection: "row",

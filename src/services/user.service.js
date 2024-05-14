@@ -52,7 +52,20 @@ const UserService = {
       .catch(e => null);
     
     if (!response) return null;
-    return response.data
+    return response.data;
+  },
+
+  async getUserDetails(userId) {
+    const response = await axios
+      .get(`${api_url}/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${this.authToken}`
+        }
+      })
+      .catch(e => null);
+    
+    if (!response) return null;
+    return response.data;
   },
 
   async recoverSession() {

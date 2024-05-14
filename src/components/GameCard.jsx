@@ -5,14 +5,22 @@ import { useNavigation } from "@react-navigation/native";
 
 import GameService from "../services/game.service";
 import globalStyles from "../styles";
+import UserService from "../services/user.service";
 
 const GameCard = ({ game, userData }) => {
   const navigation = useNavigation();
   const [isPlayer, setIsPlayer] = useState(false);
+  const [opponent, setOpponent] = useState(null)
 
   useEffect(() => {
     setIsPlayer(game.player1Id == userData.user.id || game.player2Id == userData.user.id)
+    const opponentId = game.player1Id != userData.user.id ? game.player1Id : game.player2Id;
+    setOpponent(opponentId)
   })
+
+  if (!opponent) 
+    return null;
+
   return (
     <Card>
       <View style={styles.label}>
@@ -20,7 +28,7 @@ const GameCard = ({ game, userData }) => {
       </View>
       
       <View style={[styles.label, {backgroundColor: '#fceded'}]}>
-        <Text style={styles.text}>Opponent {game.player1Id != userData.user.id ? game.player1Id : game.player2Id}</Text>
+        <Text style={styles.text}>Opponent {opponent}</Text>
       </View>
 
       <View style={[styles.label, {backgroundColor: '#b2f7ba'}]}>
@@ -34,11 +42,15 @@ const GameCard = ({ game, userData }) => {
     </Card>
   );
 
-  function handleButton() {
+  async function handleButton() {
     if (!isPlayer)
       return handleJoinGame();
     
-    if (game.status == "MAP_CONFIG")
+    const gameDetails = await GameService.getGameDetails(game.id);
+
+    if (gameDetails.shipsCoord && gameDetails.shipsCoord.length > 0)
+      navigation.navigate("GameAction", {game, userData})
+    else
       navigation.navigate("MapConfig", {game})
   }
 
